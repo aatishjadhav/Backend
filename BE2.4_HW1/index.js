@@ -161,7 +161,7 @@ async function deleteRestaurantById(restoId) {
 
 async function deleteRestaurantByName(restoName) {
   try {
-    const deleteRestoByName = await Restaurant.findOneAndDelete(restoName);
+    const deleteRestoByName = await Restaurant.findOneAndDelete({name: restoName});
     console.log(deleteRestoByName);
   } catch (error) {
     console.log("Error in deleting restaurant data", error);
