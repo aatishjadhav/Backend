@@ -39,17 +39,17 @@ async function createRestaurant(newRestaurant) {
 
 // createRestaurant(newRestaurant);
 
-app.post("/restaurant", async (req, res) => {
+app.post("/restaurants", async (req, res) => {
   try {
+    console.log("Request Body:", req.body); // Log request body
     const saveRestaurant = await createRestaurant(req.body);
-    res
-      .status(201)
-      .json({
-        message: "Restaurant added successfully",
-        restaurant: saveRestaurant,
-      });
+    res.status(201).json({
+      message: "Restaurant added successfully",
+      restaurant: saveRestaurant,
+    });
   } catch (error) {
-    res.status(500).json({ error: "Failed to add restaurant" });
+    console.error("Error while adding restaurant:", error); // Log full error
+    res.status(500).json({ error: "Failed to add restaurant", details: error.message });
   }
 });
 
