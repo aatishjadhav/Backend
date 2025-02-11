@@ -7,26 +7,26 @@ app.use(express.json());
 
 initializeDatabase();
 
-const newMovie = {
-  title: "New Movie",
-  releaseYear: 2023,
-  genre: ["Drama"],
-  director: "Aditya Roy Kappor",
-  actors: ["Shah Rukh Khan", "Kajol"],
-  language: "Hindi",
-  country: "India",
-  rating: 6.1,
-  plot: "A young man and woman fall in love on a Australia trip.",
-  awards: "IFA Filmfare Awards",
-  posterUrl: "https://example.com/new-poster1.jpg",
-  trailerUrl: "https://example.com/new-trailer1.mp4",
-};
+// const newMovie = {
+//   title: "New Movie",
+//   releaseYear: 2023,
+//   genre: ["Drama"],
+//   director: "Aditya Roy Kappor",
+//   actors: ["Shah Rukh Khan", "Kajol"],
+//   language: "Hindi",
+//   country: "India",
+//   rating: 6.1,
+//   plot: "A young man and woman fall in love on a Australia trip.",
+//   awards: "IFA Filmfare Awards",
+//   posterUrl: "https://example.com/new-poster1.jpg",
+//   trailerUrl: "https://example.com/new-trailer1.mp4",
+// };
 
 async function createMovie(newMovie) {
   try {
     const movie = new Movie(newMovie);
     const saveMovie = await movie.save();
-    console.log("New Movie data:", saveMovie);
+    return saveMovie;
   } catch (error) {
     throw error;
   }
@@ -34,6 +34,18 @@ async function createMovie(newMovie) {
 
 // createMovie(newMovie);
 
+app.post("/movies", async (req, res) => {
+  try {
+    const saveMovie = await createMovie(req.body);
+    res
+      .status(201)
+      .json({ message: "Movie added successfully", movie: saveMovie });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add movie" });
+  }
+});
+
+// createMovie(newMovie);
 
 // find a movie with particular title
 async function readMovieByTitle(movieTitle) {
