@@ -77,7 +77,7 @@ async function readRestaurantByName(restoName) {
 app.get("/restaurants/:restaurantName", async (req, res) => {
   try {
     const restaurants = await readRestaurantByName(req.params.restaurantName);
-    if (restaurants) {
+    if (restaurants.length !== 0) {
       res.json(restaurants);
     } else {
       res.status(404).json({ error: "Restaurant not found" });
@@ -127,7 +127,7 @@ async function readRestaurantByPhone(phone) {
 app.get("/restaurants/directory/:phoneNumber", async (req, res) => {
   try {
     const restaurants = await readRestaurantByPhone(req.params.phoneNumber);
-    if (restaurants) {
+    if (restaurants.length !== 0) {
       res.json(restaurants);
     } else {
       res.status(404).json({ error: "Restaurant not found" });
@@ -151,7 +151,7 @@ async function readRestaurantByCuisine(cuisine) {
 app.get("/restaurants/cuisine/:cuisineName", async (req, res) => {
   try {
     const restaurants = await readRestaurantByCuisine(req.params.cuisineName);
-    if (restaurants) {
+    if (restaurants.length !== 0) {
       res.json(restaurants);
     } else {
       res.status(404).json({ error: "Restaurant not found" });
@@ -175,7 +175,7 @@ app.get("/restaurants/location/:restaurantLocation", async (req, res) => {
     const restaurant = await readRestaurantByLocation(
       req.params.restaurantLocation
     );
-    if (restaurant) {
+    if (restaurant.length !== 0) {
       res.json(restaurant);
     } else {
       res.status(404).json({ error: "Restaurant not found" });
