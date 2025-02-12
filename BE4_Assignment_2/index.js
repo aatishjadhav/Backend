@@ -36,18 +36,10 @@ app.post("/recipes", async (req, res) => {
   }
 });
 
-async function readAllRecipes() {
-  try {
-    const getAllRecipe = await Recipe.find();
-    return getAllRecipe;
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 app.get("/recipes", async (req, res) => {
   try {
-    const getRecipes = await readAllRecipes();
+    const getRecipes = await Recipe.find();
     if (getRecipes) {
       res
         .status(200)
@@ -60,18 +52,10 @@ app.get("/recipes", async (req, res) => {
   }
 });
 
-async function getRecipeByTitle(title) {
-  try {
-    const getRecipe = await Recipe.findOne({ title: title });
-    return getRecipe;
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 app.get("/recipe/:recipeTitle", async (req, res) => {
   try {
-    const findRecipe = await getRecipeByTitle(req.params.recipeTitle);
+    const findRecipe = await Recipe.find({ title: req.params.recipeTitle });
     if (findRecipe) {
       res.status(200).json({
         message: "Recipe fetched successfully using title",
@@ -85,18 +69,10 @@ app.get("/recipe/:recipeTitle", async (req, res) => {
   }
 });
 
-async function getRecipeByAuthor(author) {
-  try {
-    const getRecipe = await Recipe.find({ author: author });
-    return getRecipe;
-  } catch (error) {
-    console.log(error);
-  }
-}
 
-app.get("/recipe/directory/:authorName", async (req, res) => {
+app.get("/recipe/author/:authorName", async (req, res) => {
   try {
-    const findRecipes = await getRecipeByAuthor(req.params.authorName);
+    const findRecipes = await Recipe.find({ author: req.params.authorName });
     if (findRecipes) {
       res.status(200).json({
         message: "Recipe fetched successfully using author name",
@@ -126,10 +102,10 @@ app.get("/recipe/level/easy", async (req, res) => {
   }
 });
 
-app.post("/recipe/update/:recipeId", async (req, res) => {
+app.post("/recipe/update/:recipeTitle", async (req, res) => {
   try {
-    const updatedRecipe = await Recipe.findByIdAndUpdate(
-      req.params.recipeId,
+    const updatedRecipe = await Recipe.findOneAndUpdate(
+      { title: req.params.recipeTitle },
       req.body,
       { new: true }
     );
@@ -146,7 +122,7 @@ app.post("/recipe/update/:recipeId", async (req, res) => {
   }
 });
 
-app.delete("/recipe/directory/:recipeId", async (req, res) => {
+app.delete("/recipe/delete/:recipeId", async (req, res) => {
   try {
     const deletedRecipe = await Recipe.findByIdAndDelete(
       req.params.recipeId,
@@ -154,12 +130,10 @@ app.delete("/recipe/directory/:recipeId", async (req, res) => {
       { new: true }
     );
     if (deletedRecipe) {
-      res
-        .status(200)
-        .json({
-          message: "Recipe deleted successfully",
-          recipe: deletedRecipe,
-        });
+      res.status(200).json({
+        message: "Recipe deleted successfully",
+        recipe: deletedRecipe,
+      });
     }
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch recipes" });
